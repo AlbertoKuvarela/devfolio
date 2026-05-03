@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevFolio — Your Portfolio. In 2 Minutes.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070709;
+    --surface: #0f0f12;
+    --surface-2: #141418;
+    --border: #1c1c22;
+    --border-light: #242430;
+    --lime: #c8f135;
+    --lime-dim: #8faa25;
+    --lime-glow: rgba(200,241,53,0.12);
+    --white: #efefef;
+    --muted: #4a4a58;
+    --text: #9494a8;
+    --text-bright: #c4c4d4;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--lime);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, opacity 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(200,241,53,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+  }
+  body:has(a:hover) .cursor,
+  body:has(button:hover) .cursor { width: 16px; height: 16px; }
+  body:has(a:hover) .cursor-ring,
+  body:has(button:hover) .cursor-ring { width: 52px; height: 52px; border-color: rgba(200,241,53,0.2); }
+
+  /* GRAIN OVERLAY */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.5;
+  }
+
+  /* ─── NAV ─────────────────────────────── */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 48px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(7,7,9,0.88);
+    backdrop-filter: blur(20px);
+    z-index: 500;
+  }
+
+  .logo {
+    font-family: 'Fira Code', monospace;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--lime);
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .logo .logo-word { color: var(--white); }
+  .logo .logo-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 18px;
+    background: var(--lime);
+    margin-left: 1px;
+    animation: blink 1.2s step-end infinite;
+  }
+  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nav-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.2px;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--lime);
+    color: #000;
+    border: none;
+    padding: 9px 22px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: none;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 0.2px;
+  }
+  .nav-cta:hover { background: var(--white); transform: translateY(-1px); }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+  }
+
+  /* ─── HERO ────────────────────────────── */
+  .hero {
+    min-height: 94vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 80px 48px;
+    position: relative;
+    overflow: hidden;
+    gap: 60px;
+  }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; padding: 60px 24px; }
+    .hero-visual { display: none; }
+  }
+
+  /* diagonal accent lines */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -100px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(ellipse at center, rgba(200,241,53,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,241,53,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,241,53,0.03) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse 60% 70% at 30% 50%, black 0%, transparent 100%);
+  }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(200,241,53,0.07);
+    border: 1px solid rgba(200,241,53,0.18);
+    color: var(--lime);
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    padding: 5px 13px;
+    margin-bottom: 28px;
+    width: fit-content;
+    animation: fadeUp 0.7s ease both;
+    letter-spacing: 0.3px;
+  }
+
+  .badge-dot {
+    width: 5px;
+    height: 5px;
+    background: var(--lime);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(0.8);} }
+
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(52px, 6vw, 88px);
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: -1.5px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--lime);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text);
+    max-width: 440px;
+    line-height: 1.75;
+    font-weight: 400;
+    margin-bottom: 40px;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-form {
+    display: flex;
+    gap: 0;
+    max-width: 440px;
+    animation: fadeUp 0.7s 0.3s ease both;
+    box-shadow: 0 0 0 1px var(--border);
+  }
+
+  .hero-form input {
+    flex: 1;
+    background: var(--surface);
+    border: none;
+    color: var(--white);
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    padding: 15px 18px;
+    outline: none;
+    transition: background 0.2s;
+    min-width: 0;
+  }
+  .hero-form input:focus { background: var(--surface-2); }
+  .hero-form input::placeholder { color: var(--muted); }
+
+  .hero-form button {
+    background: var(--lime);
+    color: #000;
+    border: none;
+    padding: 15px 24px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .hero-form button:hover { background: var(--white); }
+
+  .hero-note {
+    margin-top: 11px;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    animation: fadeUp 0.7s 0.4s ease both;
+    letter-spacing: 0.2px;
+  }
+
+  .hero-social-proof {
+    margin-top: 44px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: fadeUp 0.7s 0.5s ease both;
+  }
+
+  .avatars { display: flex; }
+  .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    margin-left: -7px;
+  }
+  .avatar:first-child { margin-left: 0; }
+
+  .social-text {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Fira Code', monospace;
+    line-height: 1.5;
+  }
+  .social-text strong { color: var(--text-bright); font-family: 'Manrope', sans-serif; font-weight: 600; }
+
+  /* ─── HERO VISUAL ─────────────────────── */
+  .hero-visual {
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.9s 0.3s ease both;
+  }
+
+  .portfolio-mockup {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow:
+      0 40px 80px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(200,241,53,0.06),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    transform: perspective(1200px) rotateY(-8deg) rotateX(3deg);
+    transition: transform 0.5s ease;
+  }
+  .portfolio-mockup:hover {
+    transform: perspective(1200px) rotateY(-4deg) rotateX(1deg);
+  }
+
+  .mockup-bar {
+    background: var(--surface-2);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mockup-dots { display: flex; gap: 5px; }
+  .mockup-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .mockup-dot:nth-child(1) { background: #ff5f56; }
+  .mockup-dot:nth-child(2) { background: #ffbd2e; }
+  .mockup-dot:nth-child(3) { background: #27c93f; }
+  .mockup-url {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border-radius: 2px;
+    padding: 4px 10px;
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .mockup-body { padding: 24px; }
+  .mockup-hero-line {
+    width: 60%;
+    height: 28px;
+    background: linear-gradient(90deg, rgba(200,241,53,0.15) 0%, rgba(200,241,53,0.05) 100%);
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+  .mockup-hero-line.sm {
+    width: 40%;
+    height: 14px;
+    background: rgba(255,255,255,0.05);
+    margin-bottom: 6px;
+  }
+  .mockup-hero-line.xs {
+    width: 75%;
+    height: 10px;
+    background: rgba(255,255,255,0.04);
+    margin-bottom: 20px;
+  }
+  .mockup-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .mockup-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 12px;
+    height: 70px;
+  }
+  .mockup-card-dot {
+    width: 20px; height: 4px;
+    background: var(--lime);
+    border-radius: 2px;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+  .mockup-card-line {
+    width: 80%;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    margin-bottom: 5px;
+  }
+  .mockup-card-line.short { width: 55%; }
+  .mockup-tag {
+    display: inline-block;
+    background: rgba(200,241,53,0.1);
+    border: 1px solid rgba(200,241,53,0.15);
+    color: var(--lime);
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 1px;
+  }
+
+  .mockup-label {
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--lime);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mockup-label::before, .mockup-label::after {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: rgba(200,241,53,0.3);
+  }
+
+  /* ─── SECTIONS ────────────────────────── */
+  section {
+    padding: 96px 48px;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--lime);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0.8;
+  }
+
+  h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(36px, 4.5vw, 60px);
+    font-weight: 400;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    line-height: 1.08;
+  }
+  h2 em { font-style: italic; color: var(--lime); }
+
+  .section-sub {
+    color: var(--text);
+    font-size: 16px;
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+    font-weight: 400;
+  }
+
+  /* ─── PROBLEM ─────────────────────────── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+  }
+  @media (max-width: 640px) { .problem-grid { grid-template-columns: 1fr; } }
+
+  .problem-card {
+    background: var(--surface);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .problem-card:hover { background: var(--surface-2); }
+
+  .problem-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,241,53,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .problem-card:hover::after { opacity: 1; }
+
+  .problem-card.highlight {
+    background: var(--lime);
+    color: #000;
+  }
+  .problem-card.highlight:hover { background: #d4f840; }
+  .problem-card.highlight .card-label,
+  .problem-card.highlight .card-text { color: rgba(0,0,0,0.55); }
+  .problem-card.highlight h3 { color: #000; }
+
+  .card-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .card-stat {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(52px, 6vw, 80px);
+    font-weight: 400;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .card-text {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ─── STEPS ───────────────────────────── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2px;
+  }
+
+  .step {
+    background: var(--surface);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    group: true;
+  }
+  .step:hover { background: var(--surface-2); }
+
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--lime), var(--lime-dim));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .step:hover::before { transform: scaleX(1); }
+
+  .step-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--lime);
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    opacity: 0.7;
+  }
+
+  .step-icon {
+    font-size: 32px;
+    margin-bottom: 18px;
+    display: block;
+    filter: grayscale(0.2);
+  }
+
+  .step h3 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+    color: var(--white);
+  }
+
+  .step p {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ─── FEATURES ────────────────────────── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 2px;
+  }
+
+  .feature {
+    background: var(--surface);
+    padding: 32px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature:hover { background: var(--surface-2); }
+  .feature:hover .feature-icon { transform: translateY(-3px); }
+
+  .feature-icon {
+    font-size: 26px;
+    margin-bottom: 16px;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .feature h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+    color: var(--white);
+  }
+
+  .feature p {
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* ─── PRICING ─────────────────────────── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    max-width: 860px;
+  }
+
+  .plan {
+    background: var(--surface);
+    padding: 40px;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .plan:hover { background: var(--surface-2); }
+
+  .plan.featured {
+    background: var(--lime);
+    color: #000;
+  }
+  .plan.featured:hover { background: #d4f840; }
+
+  .plan-badge {
+    display: inline-block;
+    background: #000;
+    color: var(--lime);
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  .plan-name {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .plan.featured .plan-name { color: rgba(0,0,0,0.45); }
+
+  .plan-price {
+    font-family: 'Instrument Serif', serif;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .plan-period {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    font-family: 'Fira Code', monospace;
+  }
+  .plan.featured .plan-period { color: rgba(0,0,0,0.45); }
+
+  .plan-features {
+    list-style: none;
+    margin-bottom: 36px;
+  }
+
+  .plan-features li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13.5px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-weight: 500;
+    color: var(--text-bright);
+  }
+  .plan.featured .plan-features li {
+    border-bottom-color: rgba(0,0,0,0.08);
+    color: rgba(0,0,0,0.75);
+  }
+
+  .plan-features li::before {
+    content: '→';
+    color: var(--lime);
+    font-size: 12px;
+    flex-shrink: 0;
+    font-family: 'Fira Code', monospace;
+  }
+  .plan.featured .plan-features li::before { color: rgba(0,0,0,0.4); }
+
+  .plan-btn {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    text-align: center;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    letter-spacing: 0.2px;
+  }
+
+  .plan:not(.featured) .plan-btn {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--white);
+  }
+  .plan:not(.featured) .plan-btn:hover {
+    border-color: var(--lime);
+    color: var(--lime);
+  }
+  .plan.featured .plan-btn {
+    background: #000;
+    color: var(--lime);
+  }
+  .plan.featured .plan-btn:hover { background: #111; }
+
+  /* ─── CTA SECTION ─────────────────────── */
+  .cta-section {
+    text-align: center;
+    padding: 120px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 400px;
+    background: radial-gradient(ellipse, rgba(200,241,53,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    margin: 0 auto 18px;
+    max-width: 640px;
+  }
+
+  .cta-section .section-sub {
+    margin: 0 auto 44px;
+    text-align: center;
+  }
+
+  .cta-form {
+    display: flex;
+    gap: 0;
+    max-width: 420px;
+    margin: 0 auto;
+    box-shadow: 0 0 0 1px var(--border);
+  }
+
+  .cta-form input {
+    flex: 1;
+    background: var(--surface);
+    border: none;
+    color: var(--white);
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    padding: 15px 18px;
+    outline: none;
+    transition: background 0.2s;
+    min-width: 0;
+  }
+  .cta-form input:focus { background: var(--surface-2); }
+  .cta-form input::placeholder { color: var(--muted); }
+
+  .cta-form button {
+    background: var(--lime);
+    color: #000;
+    border: none;
+    padding: 15px 24px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .cta-form button:hover { background: var(--white); }
+
+  /* ─── FOOTER ──────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer p {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ─── ANIMATIONS ──────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── SUCCESS ─────────────────────────── */
+  .success-msg {
+    display: none;
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--lime);
+    margin-top: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ─── MOBILE ──────────────────────────── */
+  @media (max-width: 640px) {
+    nav { padding: 18px 24px; }
+    .hero { padding: 60px 24px; gap: 40px; }
+    section { padding: 72px 24px; }
+    .cta-section { padding: 80px 24px; }
+    .hero-form, .cta-form { flex-direction: column; box-shadow: none; border: 1px solid var(--border); }
+    .hero-form input, .cta-form input { border-bottom: 1px solid var(--border); }
+    footer { padding: 24px; flex-direction: column; text-align: center; }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+
+  /* ─── DIVIDER LINE ────────────────────── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  .section-divider::before, .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── NAV ──────────────────────────────────────── -->
+<nav>
+  <div class="logo">
+    dev<span class="logo-word">folio</span><span class="logo-cursor"></span>
+  </div>
+  <div class="nav-links">
+    <a href="#how" class="nav-link">How it works</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+  </div>
+  <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      early_access — spots limited
+    </div>
+
+    <h1>Your portfolio.<br><em>In 2 minutes.</em><br>Clients in days.</h1>
+
+    <p class="hero-sub">
+      Answer 10 questions. DevFolio generates a professional portfolio with AI copy that actually <em style="color:var(--text-bright);font-style:normal;font-weight:600;">sells</em> your skills — not just lists them.
+    </p>
+
+    <form class="hero-form" id="heroForm" action="https://formspree.io/f/mgodvgrk" onsubmit="handleSubmit(event, 'heroSuccess', this)">
+      <input type="email" name="email" placeholder="your@email.com" required>
+      <button type="submit" id="heroBtn">Get Early Access →</button>
+    </form>
+    <div class="success-msg" id="heroSuccess">✓ You're on the list! We'll reach out soon.</div>
+    <p class="hero-note">// free to start · no credit card · launches Q3 2025</p>
+
+    <div class="hero-social-proof">
+      <div class="avatars">
+        <div class="avatar">👨‍💻</div>
+        <div class="avatar">👩‍💻</div>
+        <div class="avatar">🧑‍💻</div>
+        <div class="avatar">👨‍💻</div>
+      </div>
+      <div class="social-text">
+        <strong>127 developers</strong> already on the waitlist
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div style="position:relative;">
+      <div class="portfolio-mockup">
+        <div class="mockup-bar">
+          <div class="mockup-dots">
+            <div class="mockup-dot"></div>
+            <div class="mockup-dot"></div>
+            <div class="mockup-dot"></div>
+          </div>
+          <div class="mockup-url">alex.devfolio.io</div>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-hero-line"></div>
+          <div class="mockup-hero-line sm"></div>
+          <div class="mockup-hero-line xs"></div>
+          <div class="mockup-cards">
+            <div class="mockup-card">
+              <div class="mockup-card-dot"></div>
+              <div class="mockup-card-line"></div>
+              <div class="mockup-card-line short"></div>
+            </div>
+            <div class="mockup-card">
+              <div class="mockup-card-dot"></div>
+              <div class="mockup-card-line"></div>
+              <div class="mockup-card-line short"></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="mockup-tag">React</span>
+            <span class="mockup-tag">Node.js</span>
+            <span class="mockup-tag">PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-label">generated in 2 minutes</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROBLEM ───────────────────────────────────── -->
+<section>
+  <div class="section-label reveal">The Problem</div>
+  <h2 class="reveal">Clients judge you<br>in <em>7 seconds.</em></h2>
+  <p class="section-sub reveal">Your GitHub profile and LinkedIn aren't enough. You need a portfolio that converts visitors into paying clients.</p>
+
+  <div class="problem-grid reveal">
+    <div class="problem-card">
+      <div class="card-label">Average time lost</div>
+      <div class="card-stat">40h</div>
+      <p class="card-text">That's how long most developers spend building a portfolio — and it still ends up looking generic.</p>
+    </div>
+    <div class="problem-card">
+      <div class="card-label">Typical result</div>
+      <div class="card-stat">0%</div>
+      <p class="card-text">Most portfolios list skills. They don't sell. Zero inquiries, zero clients, zero ROI on those 40 hours.</p>
+    </div>
+    <div class="problem-card highlight">
+      <div class="card-label">With DevFolio</div>
+      <div class="card-stat">2min</div>
+      <p class="card-text">Answer 10 questions. AI generates your portfolio with copy that converts visitors into clients.</p>
+    </div>
+    <div class="problem-card">
+      <div class="card-label">Freelancers worldwide</div>
+      <div class="card-stat">60M+</div>
+      <p class="card-text">Every one of them needs a portfolio. Most of them hate making one. That's your market.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ──────────────────────────────── -->
+<section id="how">
+  <div class="section-label reveal">How It Works</div>
+  <h2 class="reveal">Simple as<br><em>1, 2, 3.</em></h2>
+  <p class="section-sub reveal">No design skills needed. No writing skills. Just answer questions honestly.</p>
+
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-num">STEP_01</div>
+      <span class="step-icon">📋</span>
+      <h3>Answer 10 questions</h3>
+      <p>Your stack, projects, experience, target clients, and personality. Takes 2 minutes max.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">STEP_02</div>
+      <span class="step-icon">⚡</span>
+      <h3>AI builds your portfolio</h3>
+      <p>Our AI writes compelling copy that sells your skills. Like having a top copywriter work for you.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">STEP_03</div>
+      <span class="step-icon">🚀</span>
+      <h3>Go live instantly</h3>
+      <p>Published at yourname.devfolio.io. Share on LinkedIn, Upwork, or wherever clients find you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ──────────────────────────────────── -->
+<section>
+  <div class="section-label reveal">What You Get</div>
+  <h2 class="reveal">Everything a<br><em>freelancer needs.</em></h2>
+
+  <div class="features-grid reveal">
+    <div class="feature">
+      <span class="feature-icon">✍️</span>
+      <h3>AI-written copy</h3>
+      <p>Not templates. Real persuasive writing that makes clients want to hire you specifically.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🎨</span>
+      <h3>Clean, fast design</h3>
+      <p>Loads in under 1 second. Looks great on any device. Zero bloat.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🔗</span>
+      <h3>Custom domain</h3>
+      <p>Use your own domain or get a free yourname.devfolio.io subdomain instantly.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📊</span>
+      <h3>Visitor analytics</h3>
+      <p>Know how many people visited and where they came from. Privacy-first tracking.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">💼</span>
+      <h3>Project showcase</h3>
+      <p>Beautiful project cards with screenshots, tech stack, and links. Auto-generated.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📩</span>
+      <h3>Contact form</h3>
+      <p>Built-in form that sends leads directly to your email. No third-party tools needed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ───────────────────────────────────── -->
+<section id="pricing">
+  <div class="section-label reveal">Pricing</div>
+  <h2 class="reveal">Simple pricing,<br><em>real value.</em></h2>
+  <p class="section-sub reveal">Start free. Upgrade when you land your first client — which won't take long.</p>
+
+  <div class="pricing-grid reveal">
+    <div class="plan">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-period">// forever</div>
+      <ul class="plan-features">
+        <li>1 portfolio</li>
+        <li>devfolio.io subdomain</li>
+        <li>AI-generated copy</li>
+        <li>Basic analytics</li>
+        <li>Contact form</li>
+      </ul>
+      <a href="#waitlist" class="plan-btn">Join Waitlist</a>
+    </div>
+
+    <div class="plan featured">
+      <div class="plan-badge">Most Popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$12</div>
+      <div class="plan-period">// per month</div>
+      <ul class="plan-features">
+        <li>Unlimited portfolios</li>
+        <li>Custom domain</li>
+        <li>Advanced analytics</li>
+        <li>Priority AI generation</li>
+        <li>Remove DevFolio branding</li>
+        <li>Client proposal generator</li>
+      </ul>
+      <a href="#waitlist" class="plan-btn">Get Early Access</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ──────────────────────────────────── -->
+<section class="cta-section" id="waitlist">
+  <div class="section-label reveal">Early Access</div>
+  <h2 class="reveal">Stop losing clients<br>to a <em>bad portfolio.</em></h2>
+  <p class="section-sub reveal">Join 127 developers on the waitlist. Early access members get Pro free for 3 months.</p>
+
+  <form class="cta-form reveal" id="ctaForm" action="https://formspree.io/f/mgodvgrk" onsubmit="handleSubmit(event, 'ctaSuccess', this)">
+    <input type="email" name="email" placeholder="your@email.com" required>
+    <button type="submit" id="ctaBtn">Claim My Spot →</button>
+  </form>
+  <div class="success-msg" id="ctaSuccess">✓ You're in! Check your email for next steps.</div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div class="logo">
+    dev<span class="logo-word">folio</span><span class="logo-cursor"></span>
+  </div>
+  <p>Built for developers who want clients, not just a pretty site.</p>
+  <p>© 2025 DevFolio</p>
+</footer>
+
+<script>
+  const FORMSPREE_ID = "mgodvgrk";
+
+  /* Custom cursor */
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+
+  (function animRing() {
+    rx += (mx - rx) * 0.14;
+    ry += (my - ry) * 0.14;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  /* Scroll reveal */
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 75);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  /* Form submit */
+  async function handleSubmit(e, successId, form) {
+    e.preventDefault();
+    const btn = form.querySelector('button');
+    const email = form.querySelector('input[type="email"]').value;
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    form.style.opacity = '0.6';
+    form.style.pointerEvents = 'none';
+
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email, source: successId === 'heroSuccess' ? 'hero' : 'cta' })
+      });
+
+      if (res.ok) {
+        btn.textContent = '✓ Done!';
+        btn.style.background = '#000';
+        btn.style.color = 'var(--lime)';
+        document.getElementById(successId).style.display = 'block';
+        form.style.opacity = '1';
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) {
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+      btn.style.background = '#c0392b';
+      btn.style.color = '#fff';
+      form.style.opacity = '1';
+      form.style.pointerEvents = 'auto';
+    }
+  }
+
+  /* Smooth scroll */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
