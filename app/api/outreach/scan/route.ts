@@ -12,7 +12,7 @@ function isRoughMatch(stack: string[], job: { tags: string[]; position: string; 
   return stack.some((tech) => haystack.includes(tech.toLowerCase()));
 }
 
-// Triggered every 2 hours by Vercel Cron (see vercel.json). Scans RemoteOK
+// Triggered once a day by Vercel Cron (see vercel.json). Scans RemoteOK
 // for openings that match each Pro user's stack, scores them with Claude,
 // and drafts a proposal for anything above the match threshold.
 export async function GET(request: Request) {

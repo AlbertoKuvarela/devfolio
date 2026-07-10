@@ -17,7 +17,7 @@ export default async function OutreachPage() {
         <p className="font-mono text-[10px] text-coral tracking-widest uppercase mb-3">Pro feature</p>
         <h1 className="font-display text-2xl font-bold mb-3">Automated outreach</h1>
         <p className="text-text mb-6">
-          DevFolio scans RemoteOK, Freelancer and Upwork every 2 hours, scores each opportunity
+          DevFolio scans RemoteOK, Freelancer and Upwork daily, scores each opportunity
           against your profile, and drafts a ready-to-send proposal. Upgrade to Pro to turn it on.
         </p>
         <Link href="/settings?upgrade=1">
@@ -38,7 +38,7 @@ export default async function OutreachPage() {
       <div className="mb-8">
         <h1 className="font-display text-3xl font-extrabold tracking-tight">Outreach</h1>
         <p className="text-text mt-1">
-          New opportunities are scanned every 2 hours. Review, tweak, and approve with one click.
+          New opportunities are scanned daily. Review, tweak, and approve with one click.
         </p>
       </div>
 

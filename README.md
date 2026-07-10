@@ -91,5 +91,6 @@ alive with GitHub activity and client testimonials.
 - Row Level Security is enabled on every table; the service-role client (`lib/supabase/admin.ts`)
   is only used server-side for cron jobs, webhooks, and public read paths that need to bypass a
   user-scoped policy (e.g. incrementing view counts on someone else's published portfolio).
-- The outreach cron (`vercel.json`) hits `/api/outreach/scan` every 2 hours; protect it in Vercel
-  project settings with the same `CRON_SECRET` value.
+- The outreach cron (`vercel.json`) hits `/api/outreach/scan` once a day (Vercel Hobby plans only
+  support daily cron jobs; bump the schedule to `0 */2 * * *` if you upgrade to Pro). Protect it in
+  Vercel project settings with the same `CRON_SECRET` value.
